@@ -6,8 +6,9 @@ from polls.models import Choice, Question
 class FormCreateQuestion(ModelForm):
     class Meta:
         model = Question
-        fields = ('question_text',)
-        labels = {'question_text':'Question text',}
+        fields = ('question_text', 'pub_date')
+        labels = {'question_text':'Question text', 
+        'pub_date':'Date published'}
 
     
 class FormCreateChoice(ModelForm):
