@@ -14,5 +14,4 @@ urlpatterns = [
     path('edit_question/<int:question_id>',views.edit_question, name='edit_question'),
     path('delete_question/<int:question_id>/',views.delete_question, name='delete_question'),
     path('<int:question_id>/add_choice/',views.add_choice, name='add_choice'),
-    
 ]
