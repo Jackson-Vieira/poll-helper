@@ -19,11 +19,11 @@ class IndexView(generic.ListView):
 
     def get_queryset(self):
         """Return the last five published questions."""
-        return Question.objects.all().filter(pub_date__lte=timezone.now())
+        return Question.objects.all().filter(pub_date__lte=timezone.now(), private_question=False)
 
 class DetailView(generic.DetailView):
     model = Question
-    template_name = 'polls/detail.html'
+    template_name = 'polls/vote_question.html'
 
     def get_queryset(self):
         """
@@ -34,7 +34,7 @@ class DetailView(generic.DetailView):
   
 class ResultsView(generic.DetailView):
     model = Question
-    template_name = 'polls/results.html'
+    template_name = 'polls/result_question.html'
 
     def get_queryset(self):
         """
@@ -48,7 +48,7 @@ def vote(request, question_id):
     try:
         selected_choice = question.choice_set.get(pk=request.POST['choice'])
     except (KeyError, Choice.DoesNotExist):
-        return render(request, 'polls/detail.html', {
+        return render(request, 'polls/vote_question.html', {
             'question': question,
             'error_message': "You didn't select a choice.", })
     else:
@@ -59,19 +59,21 @@ def vote(request, question_id):
 
 
 def create_question(request):
-
     if request.method == 'POST':
-        # verified forms
         form = FormCreateQuestion(data=request.POST)
 
         if form.is_valid():
+            question = form.save(commit=False)
+            question.pub_date = request.POST['pub_date']
+            
+            question.save()
             form.save()
 
             return HttpResponseRedirect(reverse('polls:index'))
 
     form = FormCreateQuestion()
 
-    template_name = 'polls/question_create.html'
+    template_name = 'polls/add_question.html'
     context = {
         'form':form}
     

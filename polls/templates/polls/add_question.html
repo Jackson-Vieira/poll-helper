@@ -1,0 +1,15 @@
+{% extends 'polls/base.html' %}
+{% load bootstrap5 %}
+
+{% block header %}
+    <h3>Create question:</h3>
+{% endblock header %}
+{% block extend %}
+        <form action="{% url 'polls:add_question'%}" method="post" class="d-form md-outline input-with-post-icon datepicker">
+            {% csrf_token %}
+            {% bootstrap_form form %}
+            <label for="date">Date Published:</label>
+            <input class="form-control w-25" type="datetime-local" id="pub_date" name="pub_date"><br>
+            <input type="submit" name="submit" class="btn btn-primary">
+        </form>
+{% endblock extend %}

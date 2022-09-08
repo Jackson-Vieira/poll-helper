@@ -1,17 +1,17 @@
-from django.forms import ModelForm
+from traceback import format_stack
+from django import forms
 
 from polls.models import Choice, Question
 
 
-class FormCreateQuestion(ModelForm):
+class FormCreateQuestion(forms.ModelForm):
     class Meta:
         model = Question
-        fields = ('question_text', 'pub_date')
-        labels = {'question_text':'Question text', 
-        'pub_date':'Date published'}
+        fields = ('question_text', 'private_question')
+        labels = {'question_text':'Question text', 'private_question':'Private question'}
 
     
-class FormCreateChoice(ModelForm):
+class FormCreateChoice(forms.ModelForm):
     class Meta:
         model = Choice
         fields = ('choice_text',)

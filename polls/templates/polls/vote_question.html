@@ -1,7 +1,15 @@
+{% extends 'polls/base.html' %}
+{% load bootstrap5 %}
+
+
+{% block header %}
 <p>Edit this question: <a href="{% url 'polls:edit_question' question.id %}">click</a></p>
 <p>Exclude this question: <a href="{% url 'polls:delete_question' question.id %}">click</a></p>
 <p>Add a choice for this question: <a href="{% url 'polls:add_choice' question.id %}">click</a> </p>
+{% endblock header %}
 
+
+{% block extend %}
 <form action="{% url 'polls:vote' question.id %}" method="post">
     {% csrf_token %}
     <fieldset>
@@ -9,9 +17,18 @@
         {% if error_message %} <strong style="color:red"><p> {{error_message}} </p> {% endif %}</strong>
     
         {% for choice in question.choice_set.all %}
-            <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{choice.id}}" >
-            <label for="choice{{forloop.counter}}">{{choice.choice_text}} </label><br>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{choice.id}}">
+            <label class="form-check-label" for="choice{{forloop.counter}}">
+              {{choice.choice_text}}
+            </label>
+          </div>
         {% endfor %}
-    </fieldset>
-    <input type="submit" value="Vote"> 
+    </fieldset><br>
+    <input type="submit" name="submit" class="btn btn-primary">
 </form>
+{% endblock extend %}
+
+
+
+
