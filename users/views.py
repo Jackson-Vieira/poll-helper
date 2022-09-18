@@ -1,8 +1,12 @@
 from django.shortcuts import render
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth import login, authenticate
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from django.contrib.auth.decorators import login_required
+
+
+from polls.models import Question
 
 # Create your views here.
 def register(request):
@@ -22,8 +26,12 @@ def register(request):
     template_name = "users/register.html"
     return render(request, template_name, context)
 
-def perfil(request):
-    pass
-
+@login_required
 def topics(request):
-    pass
+    topics = Question.objects.filter(
+        owner=request.user,
+    )
+
+    template_name = 'users/topics.html'
+    context = {'topics':topics}
+    return render(request, template_name, context)

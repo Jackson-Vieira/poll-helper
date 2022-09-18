@@ -1,16 +1,17 @@
 from django.db import models
 from django.utils import timezone
 from django.contrib import admin
+from django.contrib.auth.models import User
 
 import datetime
 import uuid
 
 class Question(models.Model):
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, blank=False, null=False)
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-
     question_text = models.CharField(max_length=200, blank=False, null=False)
     pub_date = models.DateTimeField('date published', blank=False, null=False)
-    private_question = models.BooleanField('private question', blank=False, null=False, default=True)
+    private_question = models.BooleanField('private question', blank=False, null=False, default=False)
 
 
     @admin.display(
@@ -18,7 +19,6 @@ class Question(models.Model):
         ordering='pub_date',
         description='Published recently?'
     )
-
     def was_published_recently(self):
         datetime_now = timezone.now()
         return datetime_now - datetime.timedelta(days=1) <= self.pub_date <= datetime_now
@@ -32,7 +32,7 @@ class Question(models.Model):
 class Choice(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     choice_text = models.CharField(max_length=200)
-    votes = models.IntegerField(default=0)
+    votes = models.IntegerField(default=0) #  Change to ONE-TO-MANY
     
     def __str__(self):
         return self.choice_text

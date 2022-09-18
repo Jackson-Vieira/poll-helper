@@ -1,9 +1,8 @@
 import datetime
-from http import client
+
 from django.utils import timezone
 
 from django.test import TestCase
-
 from .models import Question, Choice
 
 from django.urls import reverse

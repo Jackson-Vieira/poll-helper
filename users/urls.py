@@ -8,6 +8,5 @@ urlpatterns = [
     path('register/', views.register, name='register'),
     path('login/', LoginView.as_view(template_name='users/login.html'), name='login'),
     path('logout/', LogoutView.as_view(), name='logout'),
-    path('perfil/', views.perfil, name='perfil'),
-    path('topics/', views.topics, name='topics')
+    path('me/topics/', views.topics, name='my_topics')
 ]

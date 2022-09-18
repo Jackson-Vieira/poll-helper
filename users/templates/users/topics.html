@@ -1,0 +1,13 @@
+{% extends 'polls/base.html' %}
+{% load bootstrap5 %}
+
+{% block header %}{% endblock header %}
+{% block extend %}
+  {% for topic in topics %}
+  {{topic}}
+  {% empty %}
+  <p>No toppics added! </p>
+  <a href="{% url 'polls:add_question' %}"><button class="btn btn-dark">Add a topic!</button></a>
+  {% endfor %}
+{% endblock extend %}
+

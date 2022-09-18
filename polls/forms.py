@@ -3,7 +3,6 @@ from django import forms
 
 from polls.models import Choice, Question
 
-
 class FormCreateQuestion(forms.ModelForm):
     class Meta:
         model = Question
