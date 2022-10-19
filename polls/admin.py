@@ -1,21 +1,20 @@
 from django.contrib import admin
 
-from polls.models import Choice, Question
+from polls.models import Choice, Topic, Registry
 
 # Register your models here.
 class ChoiceInline(admin.TabularInline):
     model = Choice
-    extra = 0
+    extra = 1
 
-class QuestionAdmin(admin.ModelAdmin):
+class TopicAdmin(admin.ModelAdmin):
     fieldsets = [
-        (None, {'fields':['question_text']}),
-        ('Data informations', {'fields':['pub_date']}),   
-        ('Privacity informations', {'fields':['private_question']})
+        ('Privacidade', {'fields':['owner']}),
+        (None, {'fields':['topic_text']}),
     ]
 
     list_display = ['question_text', 'pub_date', 'was_published_recently']
-    list_filter = ['pub_date']
+    list_filter = ['created']
     search_fields = ['question_text']
 
     date_hierarchy = 'pub_date'
@@ -23,4 +22,5 @@ class QuestionAdmin(admin.ModelAdmin):
     inlines = [ChoiceInline,]
 
 
-admin.site.register(Question, QuestionAdmin)
+admin.site.register(Topic, TopicAdmin)
+admin.site.register(Registry)
