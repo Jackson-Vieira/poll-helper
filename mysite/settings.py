@@ -28,7 +28,6 @@ ALLOWED_HOSTS = []
 
 
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -38,11 +37,17 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     #External apps
+    'django_extensions',
     'bootstrap5',
+
+    # Librarys
+    'django_filters',
+    'rest_framework',
 
     #My apps
     'polls',
     'users',
+
 ]
 
 MIDDLEWARE = [
@@ -109,9 +114,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'pt-br'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/Sao_Paulo'
 
 USE_I18N = True
 
@@ -131,3 +136,13 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_URL = "users:login"
 LOGOUT_REDIRECT_URL = LOGIN_URL
 LOGIN_REDIRECT_URL = "polls:index"
+
+REST_FRAMEWORK = {
+   'DEFAULT_AUTHENTICATION_CLASSES': ( # Autenticação
+       'rest_framework.authentication.BasicAuthentication',
+   ),
+ 
+   'DEFAULT_PERMISSION_CLASSES': ( # Autorização
+       'rest_framework.permissions.AllowAny',
+   )
+}

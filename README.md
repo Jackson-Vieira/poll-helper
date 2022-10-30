@@ -1,5 +1,7 @@
 # VotingApp 
 
+this project is being updated
+
 ### Screenshots
 ![Home (no topics)](public/readme/no_topics.png)
 
