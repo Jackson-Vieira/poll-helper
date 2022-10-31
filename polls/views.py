@@ -3,7 +3,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import status
 
-from .api.serializers import PollSerializer, ChoiceSeriliazer, VoteSerializer
+from .api.serializers import PollSerializer, ChoiceSerializer, VoteSerializer
 from .models import Poll, Choice, Vote
 
 class TopicViewSet(ModelViewSet):
@@ -12,14 +12,29 @@ class TopicViewSet(ModelViewSet):
 
     @action(detail=True, methods=['get'])
     def choices(self, request, pk=None):
-       poll = self.get_object()
-       choices = Choice.objects.filter(poll=poll)
-       serializer = ChoiceSeriliazer(choices, many=True)
-       return Response(serializer.data) 
+        poll = self.get_object()
+        choices = Choice.objects.filter(poll=poll)
+        serializer = ChoiceSerializer(choices, many=True)
+        return Response(serializer.data) 
+
+    @choices.mapping.post
+    def post_choice(self, request, pk=None):
+        data = request.data
+        
+        if not data.get("poll"):
+            data['poll'] = pk
+
+        choice = ChoiceSerializer(data=data)
+        if choice.is_valid():
+            choice.save()
+            return Response(choice.data, status.HTTP_201_CREATED)
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+    
 
 class ChoiceViewSet(ModelViewSet):
     queryset = Choice.objects.all()
-    serializer_class = ChoiceSeriliazer
+    serializer_class = ChoiceSerializer
     
     @action(detail=True, methods=['get'])
     def registrys(self, request, pk=None):
