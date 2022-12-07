@@ -1,4 +1,4 @@
-#!/home/hax/Documents/github-projects/votingApp/venv/bin/python3
+#!/home/hax/Utils/github-projects/DJANGO/APIS/poll-helper/venv/bin/python3.10
 # -*- coding: utf-8 -*-
 import re
 import sys

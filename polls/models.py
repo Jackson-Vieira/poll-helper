@@ -2,15 +2,14 @@ from django.db import models
 from django.db.models.aggregates import Avg, Sum, Count, Min, Max
 from django.contrib.auth.models import User
 from django.utils import timezone 
-
 from django.core.validators import MaxValueValidator, MinValueValidator
 
 import uuid
 
+class PollTypeChoices(models.TextChoices):
+    private = 'Private' 
+    public =  'Public' 
 
-POLL_TYPES = (
-    ('private', 'Private'),
-    )
 class Poll(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True)
     owner = models.ForeignKey(User, on_delete=models.CASCADE, blank=False, null=False)
@@ -23,7 +22,7 @@ class Poll(models.Model):
             MaxValueValidator(10), MinValueValidator(2)
             ])
 
-    poll_type = models.CharField(max_length=250, null=False, default='private', choices = POLL_TYPES)
+    poll_type = models.CharField(max_length=250, null=False, default=PollTypeChoices.public, choices= PollTypeChoices.choices)
 
     openvot = models.BooleanField(default=False)
 
@@ -49,18 +48,17 @@ class Poll(models.Model):
     def get_url_info__by_uuid(cls, uuid):
         return cls.objects.get(id=uuid)
 
-    def create_choice(self):
-        pass
-
     def voting_has_started(self):
-        pass
+        current_time = timezone.now()
+        return current_time >= self.voting_starts_at or current_time >= self.voting_started_at
 
     def voting_has_stopped(self):
-        pass
+        current_time = timezone.now()
+        return current_time <= self.voting_end_at or current_time <= self.voting_ended_at
 
     @property
     def get_choices(self):
-        choices = self.choices.all() #BAD OTIMIZED
+        choices = self.choices.all()
         return choices.values()
 
     @property
@@ -111,5 +109,3 @@ class Vote(models.Model):
     class Meta:
         verbose_name = 'Vote'
         verbose_name_plural = 'Votes'
- 
-    # validate_and_registry()

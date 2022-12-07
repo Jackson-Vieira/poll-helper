@@ -36,16 +36,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    #External apps
-    'django_extensions',
-    'bootstrap5',
-
-    # Librarys
+    # External librarys
     'django_filters',
     'rest_framework',
 
-    #My apps
-    'polls',
+    # My apps
+    'polls.apps.PollsConfig',
 
 ]
 
@@ -131,10 +127,6 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-LOGIN_URL = "users:login"
-LOGOUT_REDIRECT_URL = LOGIN_URL
-LOGIN_REDIRECT_URL = "polls:index"
 
 REST_FRAMEWORK = {
    'DEFAULT_AUTHENTICATION_CLASSES': ( # Autenticação

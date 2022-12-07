@@ -30,7 +30,7 @@ end
 # Unset irrelevant variables.
 deactivate nondestructive
 
-set -gx VIRTUAL_ENV "/home/hax/Documents/github-projects/votingApp/venv"
+set -gx VIRTUAL_ENV "/home/hax/Utils/github-projects/DJANGO/APIS/poll-helper/venv"
 
 set -gx _OLD_VIRTUAL_PATH $PATH
 set -gx PATH "$VIRTUAL_ENV/bin" $PATH
