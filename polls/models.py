@@ -1,12 +1,16 @@
 from django.db import models
 from django.db.models.aggregates import Avg, Sum, Count, Min, Max
 from django.contrib.auth.models import User
-from datetime import datetime
+from django.utils import timezone 
 
 from django.core.validators import MaxValueValidator, MinValueValidator
 
 import uuid
 
+
+POLL_TYPES = (
+    ('private', 'Private'),
+    )
 class Poll(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True)
     owner = models.ForeignKey(User, on_delete=models.CASCADE, blank=False, null=False)
@@ -19,15 +23,8 @@ class Poll(models.Model):
             MaxValueValidator(10), MinValueValidator(2)
             ])
 
-    POLL_TYPES = (
-    ('private', 'Private'),
-    )
-
     poll_type = models.CharField(max_length=250, null=False, default='private', choices = POLL_TYPES)
 
-    # CACHEs (result, choices)
-
-    # allow votes?
     openvot = models.BooleanField(default=False)
 
     created = models.DateTimeField('creation date', auto_now_add=True)
@@ -41,7 +38,6 @@ class Poll(models.Model):
     voting_started_at = models.DateTimeField(auto_now_add=False, default=None, null=True)
     voting_ended_at = models.DateTimeField(auto_now_add=False, default=None, null=True)
 
-    # validate_and_create()
 
     @property
     def metadata(self):
@@ -73,11 +69,11 @@ class Poll(models.Model):
 
     @property
     def total_votes(self):
-        return self.choices.aggregate(total_votes=Count('votes'))['total_votes'] # BAD OTIMIZED
+        return self.choices.aggregate(total_votes=Count('votes'))['total_votes']
 
     @property
     def get_results(self):
-        return self.choices.annotate(total=Count('votes__id')).order_by('-total') # BAD OTIMIZED
+        return self.choices.annotate(total=Count('votes__id')).order_by('-total')
 
     @property
     def type(self):
@@ -110,7 +106,7 @@ class Choice(models.Model):
 class Vote(models.Model):
     user =  models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='registry', blank=False, null=False)
     choice = models.ForeignKey(Choice, on_delete=models.DO_NOTHING, related_name='registry', blank=False, null=False)
-    created = created = models.DateTimeField('creation date', auto_now_add=True, editable=False)
+    created = models.DateTimeField('creation date', auto_now_add=True, editable=False)
 
     class Meta:
         verbose_name = 'Vote'
