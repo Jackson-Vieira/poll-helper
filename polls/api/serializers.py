@@ -7,6 +7,7 @@ class ChoiceSerializer(ModelSerializer):
         fields = ('id', 'poll', 'choice_text', 'num_votes',)
 
         read_only_fields = ('id', 'num_votes')
+        #extra_kwargs = {}
 
 class PollSerializer(ModelSerializer):
     choices = ChoiceSerializer(many=True, read_only=True)
@@ -18,6 +19,7 @@ class PollSerializer(ModelSerializer):
             'choices'
             )
         read_only_fields = ('id', 'owner' 'created', 'updated', 'total_votes',)
+        #extra_kwargs = {}
 
 class VoteSerializer(ModelSerializer):
     # user = UserSerializer()
@@ -26,3 +28,4 @@ class VoteSerializer(ModelSerializer):
         model = Vote
         fields = ('user', 'choice', 'created')  
         read_only_fields = ('user', 'created',)
+        #extra_kwargs = {}
